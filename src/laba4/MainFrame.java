@@ -14,6 +14,7 @@ public class MainFrame extends JFrame {
     private JCheckBoxMenuItem showAxisMenuItem;
     private JCheckBoxMenuItem showMarkersMenuItem;
     private JMenuItem resetGraphicsMenuItem;
+    private JMenuItem saveToTextMenuItem;
     private JFileChooser fileChooser = null;
 
     public MainFrame() {
@@ -41,7 +42,20 @@ public class MainFrame extends JFrame {
         };
         fileMenu.add(openGraphicsAction);
 
+        Action saveToTextAction = new AbstractAction("Сохранить в .txt") {
+            public void actionPerformed(ActionEvent arg0) {
+                if (MainFrame.this.fileChooser == null) {
+                    MainFrame.this.fileChooser = new JFileChooser();
+                    MainFrame.this.fileChooser.setCurrentDirectory(new File("."));
+                }
 
+                if (MainFrame.this.fileChooser.showSaveDialog(MainFrame.this) == 0) {
+                    MainFrame.this.display.saveToTextFile(MainFrame.this.fileChooser.getSelectedFile());
+                }
+
+            }
+        };
+        this.saveToTextMenuItem = fileMenu.add(saveToTextAction);
 
         JMenu graphicsMenu = new JMenu("График");
         menuBar.add(graphicsMenu);
@@ -88,7 +102,7 @@ public class MainFrame extends JFrame {
         public void menuSelected(MenuEvent arg0) {
             MainFrame.this.showAxisMenuItem.setEnabled(MainFrame.this.fileLoaded);
             MainFrame.this.showMarkersMenuItem.setEnabled(MainFrame.this.fileLoaded);
-
+            MainFrame.this.saveToTextMenuItem.setEnabled(MainFrame.this.fileLoaded);
         }
     }
 
